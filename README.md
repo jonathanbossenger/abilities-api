@@ -13,7 +13,7 @@ _Part of the **AI Building Blocks for WordPress** initiative_
 4. **Gradual adoption** – ships first as a Composer package, migrates smoothly to core.
 
 ## Inspiration
-* **[wp‑feature‑api](https://github.com/WordPress/feature-requests)** – shared vision of declaring capabilities at the PHP layer.  
+* **[wp‑feature‑api](https://github.com/automattic/wp-feature-api)** – shared vision of declaring capabilities at the PHP layer.  
 * Command Palette experiments in Gutenberg.  
 * Modern AI assistant protocols (MCP, A2A).
 
