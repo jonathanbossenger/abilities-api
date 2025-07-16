@@ -31,7 +31,5 @@ _Part of the **AI Building Blocks for WordPress** initiative_
 * **File issues:** suggestions & use‑cases welcome in this repo.  
 * **Prototype:** experiment with the upcoming Composer package once released.
 
----
-
 ## License
 GPL-3
