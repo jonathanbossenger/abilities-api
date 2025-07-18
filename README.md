@@ -32,4 +32,4 @@
 * **Prototype:** experiment with the upcoming Composer package once released.
 
 ## License
-GPL-3
+[GPL-2.0-or-later](https://spdx.org/licenses/GPL-2.0-or-later.html)
