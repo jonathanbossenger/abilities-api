@@ -16,6 +16,14 @@
 3. **Security‑first** - explicit permissions determine who/what may invoke an ability.
 4. **Gradual adoption** - ships first as a Composer package, migrates smoothly to core.
 
+## Developer Documentation
+
+- [Introduction](docs/1.intro.md)
+- [Getting Started](docs/2.getting-started.md)
+- [Registering Abilities](docs/3.registering-abilities.md)
+- [Using Abilities](docs/4.using-abilities.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+
 ## Inspiration
 
 - **[wp‑feature‑api](https://github.com/automattic/wp-feature-api)** - shared vision of declaring capabilities at the PHP layer.
@@ -25,10 +33,10 @@
 ## Current Status
 
 | Milestone                           | State       |
-| ----------------------------------- | ----------- |
+| ----------------------------------- |-------------|
 | Placeholder repository              | **created** |
 | Spec draft                          | in progress |
-| Prototype plugin & Composer package | planned     |
+| Prototype plugin & Composer package | in progress |
 | Community feedback (#core‑ai Slack) | planned     |
 | Core proposal                       | planned     |
 
