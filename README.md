@@ -22,6 +22,7 @@
 - [Getting Started](docs/2.getting-started.md)
 - [Registering Abilities](docs/3.registering-abilities.md)
 - [Using Abilities](docs/4.using-abilities.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
 
 ## Inspiration
 
