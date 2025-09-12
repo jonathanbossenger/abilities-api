@@ -65,7 +65,7 @@ class WP_Ability {
 	 * The ability execute callback.
 	 *
 	 * @since 0.1.0
-	 * @var callable( array<string,mixed> $input): (mixed|\WP_Error)
+	 * @var callable( mixed $input= ): (mixed|\WP_Error)
 	 */
 	protected $execute_callback;
 
@@ -73,7 +73,7 @@ class WP_Ability {
 	 * The optional ability permission callback.
 	 *
 	 * @since 0.1.0
-	 * @var ?callable( array<string,mixed> $input ): (bool|\WP_Error)
+	 * @var ?callable( mixed $input= ): (bool|\WP_Error)
 	 */
 	protected $permission_callback = null;
 
@@ -145,8 +145,8 @@ class WP_Ability {
 	 *   description: string,
 	 *   input_schema?: array<string,mixed>,
 	 *   output_schema?: array<string,mixed>,
-	 *   execute_callback: callable( array<string,mixed> $input): (mixed|\WP_Error),
-	 *   permission_callback?: ?callable( array<string,mixed> $input ): (bool|\WP_Error),
+	 *   execute_callback: callable( mixed $input= ): (mixed|\WP_Error),
+	 *   permission_callback?: ?callable( mixed $input= ): (bool|\WP_Error),
 	 *   meta?: array<string,mixed>,
 	 *   ...<string, mixed>,
 	 * } $args
@@ -269,13 +269,23 @@ class WP_Ability {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param array<string,mixed> $input Optional. The input data to validate.
+	 * @param mixed $input Optional. The input data to validate. Default `null`.
 	 * @return true|\WP_Error Returns true if valid or the WP_Error object if validation fails.
 	 */
-	protected function validate_input( array $input = array() ) {
+	protected function validate_input( $input = null ) {
 		$input_schema = $this->get_input_schema();
 		if ( empty( $input_schema ) ) {
-			return true;
+			if ( null === $input ) {
+				return true;
+			}
+			return new \WP_Error(
+				'ability_missing_input_schema',
+				sprintf(
+					/* translators: %s ability name. */
+					__( 'Ability "%s" does not define an input schema required to validate the provided input.' ),
+					$this->name
+				)
+			);
 		}
 
 		$valid_input = rest_validate_value_from_schema( $input, $input_schema, 'input' );
@@ -301,10 +311,10 @@ class WP_Ability {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param array<string,mixed> $input Optional. The input data for permission checking.
+	 * @param mixed $input Optional. The input data for permission checking. Default `null`.
 	 * @return bool|\WP_Error Whether the ability has the necessary permission.
 	 */
-	public function has_permission( array $input = array() ) {
+	public function has_permission( $input = null ) {
 		$is_valid = $this->validate_input( $input );
 		if ( is_wp_error( $is_valid ) ) {
 			return $is_valid;
@@ -312,6 +322,10 @@ class WP_Ability {
 
 		if ( ! is_callable( $this->permission_callback ) ) {
 			return true;
+		}
+
+		if ( empty( $this->get_input_schema() ) ) {
+			return call_user_func( $this->permission_callback );
 		}
 
 		return call_user_func( $this->permission_callback, $input );
@@ -322,16 +336,20 @@ class WP_Ability {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param array<string,mixed> $input The input data for the ability.
+	 * @param mixed $input Optional. The input data for the ability. Default `null`.
 	 * @return mixed|\WP_Error The result of the ability execution, or WP_Error on failure.
 	 */
-	protected function do_execute( array $input ) {
+	protected function do_execute( $input = null ) {
 		if ( ! is_callable( $this->execute_callback ) ) {
 			return new \WP_Error(
 				'ability_invalid_execute_callback',
 				/* translators: %s ability name. */
 				sprintf( __( 'Ability "%s" does not have a valid execute callback.' ), $this->name )
 			);
+		}
+
+		if ( empty( $this->get_input_schema() ) ) {
+			return call_user_func( $this->execute_callback );
 		}
 
 		return call_user_func( $this->execute_callback, $input );
@@ -373,10 +391,10 @@ class WP_Ability {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param array<string,mixed> $input Optional. The input data for the ability.
+	 * @param mixed $input Optional. The input data for the ability. Default `null`.
 	 * @return mixed|\WP_Error The result of the ability execution, or WP_Error on failure.
 	 */
-	public function execute( array $input = array() ) {
+	public function execute( $input = null ) {
 		$has_permissions = $this->has_permission( $input );
 		if ( true !== $has_permissions ) {
 			if ( is_wp_error( $has_permissions ) ) {
